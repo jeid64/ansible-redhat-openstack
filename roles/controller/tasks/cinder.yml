@@ -19,13 +19,16 @@
 - name: start the tgtd service
   service: name=tgtd state=started enabled=yes
 
+- name: Copy keyfile for cinder for Ceph
+  copy: src=ceph.client.volumes.keyring dest=/etc/ceph/ceph.client.volumes.keyring owner=cinder group=cinder mode=0600 
+
 - name: DB sync for the nova services
   shell: cinder-manage db sync; touch /etc/cinder/db.synced
          creates=/etc/cinder/db.synced
 
-- name: create the volume group for cinder
-  shell: vgcreate cinder-volumes {{ cinder_volume_dev }} 
-         creates=/etc/lvm/backup/cinder-volumes
+#- name: create the volume group for cinder
+#  shell: vgcreate cinder-volumes {{ cinder_volume_dev }} 
+#         creates=/etc/lvm/backup/cinder-volumes
 
 - name: Start the services for cinder
   service: name={{ item }} state=started enabled=yes

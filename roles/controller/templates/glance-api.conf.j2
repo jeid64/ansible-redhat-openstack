@@ -1,5 +1,17 @@
 [DEFAULT]
-default_store = file
+default_store = rbd
+rbd_store_ceph_conf = /etc/ceph/ceph.conf
+
+# RADOS user to authenticate as (only applicable if using cephx)
+rbd_store_user = images
+
+# RADOS pool in which images are stored
+rbd_store_pool = images
+
+# Images will be chunked into objects of this size (in megabytes).
+# For best performance, this should be a power of two
+rbd_store_chunk_size = 8
+
 bind_host = 0.0.0.0
 bind_port = 9292
 log_file = /var/log/glance/api.log

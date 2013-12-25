@@ -6,7 +6,7 @@ reconnect_interval = 2
 tenant_network_type = gre
 tunnel_id_ranges = 1:1000
 enable_tunneling = True
-local_ip = {{ hostvars[ansible_hostname]['ansible_'+iface].ipv4.address }}
+local_ip = {{ hostvars[inventory_hostname]['ansible_'+iface].ipv4.address }}
 
 [AGENT]
 polling_interval = 2

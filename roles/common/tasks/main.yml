@@ -64,8 +64,8 @@
   shell: yum -y localinstall /root/rpmbuild/RPMS/x86_64/openvswitch-1.10.0-1.x86_64.rpm
          creates=/usr/share/doc/openvswitch-1.10.90/FAQ
 
-- name: Create the hosts entry.
-  template: src=hosts.j2 dest=/etc/hosts
+#- name: Create the hosts entry.
+#  template: src=hosts.j2 dest=/etc/hosts
 
 - name: start the openvswitch service.
   service: name=openvswitch state=started

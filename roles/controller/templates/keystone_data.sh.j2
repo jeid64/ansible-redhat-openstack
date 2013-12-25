@@ -14,9 +14,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-CONTROLLER_PUBLIC_ADDRESS={{ hostvars[ansible_hostname]['ansible_'+iface].ipv4.address }}
-CONTROLLER_ADMIN_ADDRESS={{ hostvars[ansible_hostname]['ansible_'+iface].ipv4.address }}
-CONTROLLER_INTERNAL_ADDRESS={{ hostvars[ansible_hostname]['ansible_'+iface].ipv4.address }}
+CONTROLLER_PUBLIC_ADDRESS={{ hostvars[inventory_hostname]['ansible_'+iface].ipv4.address }}
+CONTROLLER_ADMIN_ADDRESS={{ hostvars[inventory_hostname]['ansible_'+iface].ipv4.address }}
+CONTROLLER_INTERNAL_ADDRESS={{ hostvars[inventory_hostname]['ansible_'+iface].ipv4.address }}
 
 TOOLS_DIR=$(cd $(dirname "$0") && pwd)
 KEYSTONE_CONF=${KEYSTONE_CONF:-/etc/keystone/keystone.conf}
