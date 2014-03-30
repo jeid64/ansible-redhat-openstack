@@ -7,5 +7,3 @@
 - include: nova.yml
 - include: cinder.yml
 - include: horizon.yml
-- include: quantum.yml
-

@@ -121,19 +121,6 @@ if [[ -z "$DISABLE_ENDPOINTS" ]]; then
         --adminurl "http://$CONTROLLER_ADMIN_ADDRESS:9292" \
         --internalurl "http://$CONTROLLER_INTERNAL_ADDRESS:9292"
 fi
-#
-# Quantum service
-#
-QUANTUM_SERVICE=$(get_id \
-keystone service-create --name=quantum \
-                        --type=network \
-                        --description="Quantun Network Service")
-if [[ -z "$DISABLE_ENDPOINTS" ]]; then
-    keystone endpoint-create --region RegionOne --service-id $QUANTUM_SERVICE \
-        --publicurl "http://$CONTROLLER_PUBLIC_ADDRESS:9696" \
-        --adminurl "http://$CONTROLLER_ADMIN_ADDRESS:9696" \
-        --internalurl "http://$CONTROLLER_INTERNAL_ADDRESS:9696"
-fi
 
 #
 # EC2 service
@@ -147,20 +134,6 @@ if [[ -z "$DISABLE_ENDPOINTS" ]]; then
         --publicurl "http://$CONTROLLER_PUBLIC_ADDRESS:8773/services/Cloud" \
         --adminurl "http://$CONTROLLER_ADMIN_ADDRESS:8773/services/Admin" \
         --internalurl "http://$CONTROLLER_INTERNAL_ADDRESS:8773/services/Cloud"
-fi
-
-#
-# Swift service
-#
-SWIFT_SERVICE=$(get_id \
-keystone service-create --name=swift \
-                        --type="object-store" \
-                        --description="Swift Service")
-if [[ -z "$DISABLE_ENDPOINTS" ]]; then
-    keystone endpoint-create --region RegionOne --service-id $SWIFT_SERVICE \
-        --publicurl   "http://$CONTROLLER_PUBLIC_ADDRESS:8888/v1/AUTH_\$(tenant_id)s" \
-        --adminurl    "http://$CONTROLLER_ADMIN_ADDRESS:8888/v1" \
-        --internalurl "http://$CONTROLLER_INTERNAL_ADDRESS:8888/v1/AUTH_\$(tenant_id)s"
 fi
 
 # create ec2 creds and parse the secret and access key returned

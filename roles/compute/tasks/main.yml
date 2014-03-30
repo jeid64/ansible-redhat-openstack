@@ -11,6 +11,7 @@
    - libvirt-client
    - libvirt-python
    - libguestfs-tools
+   - ceph
 
 - name: Make sure yum doe not remove our virt packages with yum upgrade
   lineinfile: dest=/etc/yum.conf regexp='' insertafter=EOF line='exclude= qemu*'
@@ -25,21 +26,35 @@
 - name: create link for the qemu
   file: src=/usr/libexec/qemu-kvm dest=/usr/bin/qemu-system-x86_64 state=link
 
+#Create bridge interface.
+- name: Setup networking (interfaces)
+  copy: owner=root group=root mode=644 src=ifcfg-br100 dest=/etc/sysconfig/network-scripts/ifcfg-br100
+
+# TODO -- make br100 a variable
+- name: see if br100 is already running
+  action: shell brctl show | grep br100 > /dev/null; echo $?
+  register: bridge_up
+  ignore_errors: True
+
+- name: Add bridge using brctl
+  action: shell brctl addbr br100
+  when: bridge_up|failed
+
+#- name: Add bridge using brctl
+#  command: brctl addbr br100
+
+- name: Add the bridge to eth0
+  lineinfile: dest=/etc/sysconfig/network-scripts/ifcfg-eth0 regexp='' insertafter=EOF line='BRIDGE=br100'
+
 - name: Install packages for openstack
   yum: name={{ item }} state=installed
   with_items:
    - openstack-nova-compute
-   - openstack-quantum-openvswitch
+   - openstack-nova-network
+   - openstack-nova-api
 
-- name: Create the internal bridges for openvswitch
-  shell: creates=/etc/quantum/br-int.created /usr/bin/ovs-vsctl add-br br-int; touch /etc/quantum/br-int.created
-
-- name: Copy the quantum.conf  configuration files
-  template: src=roles/controller/templates/quantum.conf.j2 dest=/etc/quantum/quantum.conf
-
-- name: Copy the quantum ovs agent configuration files
-  template: src=ovs_quantum_plugin.ini.j2 dest=/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini
-  notify:  restart quantum ovsagent
+- name: Copy over ceph.conf
+  copy: src=ceph.conf dest=/etc/ceph/ceph.conf mode=755
 
 - name: Copy keyfile for cinder for Ceph to be used in compute nodes.
   copy: src=client.volumes.key dest=/root/client.volumes.key mode=0600 

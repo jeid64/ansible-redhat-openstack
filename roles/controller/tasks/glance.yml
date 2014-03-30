@@ -4,6 +4,12 @@
 - name: Install glance OpenStack  components
   yum: name=openstack-glance state=installed
 
+- name: Install Ceph for Glance integration
+  yum: name=ceph state=installed
+
+- name: Install the python bindings for Ceph.
+  yum: name=python-ceph state=installed
+
 - name: Setup DB for glance
   shell: /usr/bin/openstack-db --init --service glance -p {{ glance_db_pass }} -r " " -y 
          creates=/var/lib/mysql/glance
@@ -15,6 +21,12 @@
 - name: Copy configuration files for glance
   template: src=glance-registry.conf.j2 dest=/etc/glance/glance-registry.conf
   notify: restart glance
+
+- name: Copy Ceph.conf for glance for Ceph
+  copy: src=ceph.conf dest=/etc/ceph/ceph.conf owner=root group=root mode=0644 
+
+- name: Copy keyfile for glance for Ceph
+  copy: src=ceph.client.images.keyring dest=/etc/ceph/ceph.client.images.keyring owner=glance group=glance mode=0600 
 
 - name: DB sync for Glance
   shell: /usr/bin/glance-manage db_sync; touch /etc/glance/db.synced

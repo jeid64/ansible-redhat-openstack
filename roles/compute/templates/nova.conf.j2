@@ -1,4 +1,4 @@
-{% set head_node_ip = hostvars[groups['openstack_controller'][0]]['ansible_'+iface].ipv4.address %}
+{% set head_node_ip = hostvars[groups['head_node'][0]]['ansible_'+iface].ipv4.address %}
 {% set local_ip = hostvars[inventory_hostname]['ansible_'+iface].ipv4.address %}
 [DEFAULT]
 
@@ -43,20 +43,22 @@ image_service=nova.image.glance.GlanceImageService
 glance_api_servers={{ head_node_ip }}:9292
 
 # NETWORK
-network_api_class = nova.network.quantumv2.api.API
-quantum_admin_username = admin
-quantum_admin_password = {{ admin_pass }}
-quantum_admin_auth_url = http://{{ head_node_ip }}:35357/v2.0
-quantum_auth_strategy = keystone
-quantum_admin_tenant_name = admin
-quantum_url = http://{{ head_node_ip }}:9696/
-libvirt_vif_driver = nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver
-service_quantum_metadata_proxy=true
+network_manager=nova.network.manager.FlatManager
+force_dhcp_release=True
+dhcpbridge_flagfile=/etc/nova/nova.conf
+#firewall_driver=nova.virt.libvirt.firewall.IptablesFirewallDriver
+firewall_driver=nova.virt.firewall.NoopFirewallDriver
+public_interface=eth0
+vlan_interface=eth0
+flat_network_bridge=br100
+flat_interface=eth0
+fixed_range=172.21.49.0/24
 libvirt_cpu_mode=host-passthrough 
 
 # Change my_ip to match each host
 my_ip={{ local_ip }}
-
+multi_host=True
+send_arp_for_ha=true
 # NOVNC CONSOLE
 novncproxy_base_url=http://{{ head_node_ip }}:6080/vnc_auto.html
 # Change vncserver_proxyclient_address and vncserver_listen to match each compute host
@@ -67,9 +69,9 @@ libvirt_cpu_mode=none
 # AUTHENTICATION
 auth_strategy = keystone
 [keystone_authtoken]
-admin_tenant_name = admin
-admin_user = admin
-admin_password = {{ admin_pass }}
+admin_tenant_name = service
+admin_user = nova
+admin_password = {{ nova_ldap_pass }}
 auth_host = {{ head_node_ip }}
 auth_port = 35357
 auth_protocol = http
