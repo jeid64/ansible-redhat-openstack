@@ -10,19 +10,18 @@ glance_filesystem_store_datadir: /var/lib/glance/images/
 nova_db_pass: nova
 nova_libvirt_type: qemu
 
-quantum_db_pass: quantum
-quantum_external_interface: eth2
+nova_ldap_pass: conical2,animism 
 
 # Interface for management, API and GRE tunnels for instance traffic
-iface: eth0
+iface: eth1
 
 cinder_db_pass: cinder
 cinder_volume_dev: /dev/vda3
 
-external_network_name: external_network
-external_subnet_name: external_sub_network
-external_subnet_cidr: 1.1.1.0/24
-external_router_name: external_router
+external_network_name: external_network_nat
+external_subnet_name: external_sub_network_nat
+external_subnet_cidr: 129.21.49.0/24
+external_router_name: external_router_nat
 #
 #By default a tenant admin is created and below is the password for the admin user of the admin tenant.
 #
