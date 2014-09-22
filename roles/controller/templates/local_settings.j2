@@ -19,6 +19,9 @@ TEMPLATE_DEBUG = DEBUG
 #CSRF_COOKIE_SECURE = True
 #SESSION_COOKIE_SECURE = True
 
+# Set ALLOWED_HOSTS to your hostname.
+ALLOWED_HOSTS = ['localhost', 'stack-02.csh.rit.edu']
+
 # Default OpenStack Dashboard configuration.
 HORIZON_CONFIG = {
     'dashboards': ('project', 'admin', 'settings',),
