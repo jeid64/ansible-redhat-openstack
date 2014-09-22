@@ -4,18 +4,15 @@
 - name: Install the required virtualization packages
   yum: name={{ item }} state=installed
   with_items:
-   - http://ceph.com/packages/qemu-kvm/centos/x86_64/qemu-img-0.12.1.2-2.355.el6.2.cuttlefish.x86_64.rpm 
    - qemu-img
-   - http://ceph.com/packages/qemu-kvm/centos/x86_64/qemu-kvm-0.12.1.2-2.355.el6.2.cuttlefish.x86_64.rpm
-   - http://ceph.com/packages/qemu-kvm/centos/x86_64/qemu-kvm-tools-0.12.1.2-2.355.el6.2.cuttlefish.x86_64.rpm
+   - qemu-kvm
+   - qemu-kvm-tools
    - libvirt
    - libvirt-client
    - libvirt-python
    - libguestfs-tools
    - bridge-utils
-
-- name: Make sure yum doe not remove our virt packages with yum upgrade
-  lineinfile: dest=/etc/yum.conf regexp='' insertafter=EOF line='exclude= qemu*'
+   - ceph
 
 - name: Configure qemu.conf in libvirt
   copy: src=qemu.conf.j2 dest=/etc/libvirt/qemu.conf

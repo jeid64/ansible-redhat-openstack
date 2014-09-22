@@ -20,6 +20,7 @@
    - dbus
    - libselinux-python
    - openssl-devel
+   - yum-plugin-priorities
   notify: restart services 
 
 - name: Disable selinux dynamically
