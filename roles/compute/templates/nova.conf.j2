@@ -1,5 +1,5 @@
-{% set head_node_ip = hostvars[groups['head_node'][0]]['ansible_'+iface].ipv4.address %}
-{% set local_ip = hostvars[inventory_hostname]['ansible_'+iface].ipv4.address %}
+{% set head_node_ip = "129.21.49.203" %}
+{% set local_ip = "129.21.49.179" %}
 [DEFAULT]
 
 # LOGS/STATE
