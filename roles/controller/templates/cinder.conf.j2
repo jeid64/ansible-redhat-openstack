@@ -22,8 +22,8 @@ rbd_ceph_conf=/etc/ceph/ceph.conf
 
 # flatten volumes created from snapshots to remove dependency
 # (boolean value)
-#rbd_flatten_volume_from_snapshot=false
-
+rbd_flatten_volume_from_snapshot=false
+rbd_max_clone_depth=5
 
 #WARNING ANSIBLE DOES NOT PUT THIS UUID IN AUTOMATICALLY
 # the libvirt uuid of the secret for the rbd_uservolumes
