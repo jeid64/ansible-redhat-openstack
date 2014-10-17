@@ -41,6 +41,9 @@
 - name: Copy over ceph.conf
   copy: src=ceph.conf dest=/etc/ceph/ceph.conf mode=755
 
+- name: Copy keyfile for cinder for Ceph
+  copy: src=ceph.client.volumes.keyring dest=/etc/ceph/ceph.client.volumes.keyring owner=nova group=nova mode=0600 
+
 - name: Copy keyfile for cinder for Ceph to be used in compute nodes.
   copy: src=client.volumes.key dest=/root/client.volumes.key mode=0600 
 
